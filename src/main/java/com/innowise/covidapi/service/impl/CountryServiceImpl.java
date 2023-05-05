@@ -21,18 +21,11 @@ public class CountryServiceImpl implements CountryService {
 
     @Override
     @Transactional
-    public void save(Country country) {
-        countryRepository.persist(country);
-    }
-
-    @Override
-    @Transactional
     public void saveAll(Iterable<Country> countryCollection) {
         countryRepository.persist(countryCollection);
     }
 
     @Override
-    @Transactional
     public Optional<Country> findByName(String name) {
         return countryRepository.findByName(name);
     }
@@ -41,5 +34,12 @@ public class CountryServiceImpl implements CountryService {
     public List<CountryDto> findAll() {
         List<Country> countryListFromDatabase = countryRepository.findAll().list();
         return countryListMapper.mapToDtoList(countryListFromDatabase);
+    }
+
+    @Override
+    public List<String> getSlugListByCountryNameList(List<String> countryNameList) {
+        return countryNameList.stream()
+                .map(countryName -> findByName(countryName).get().getSlug())
+                .toList();
     }
 }
