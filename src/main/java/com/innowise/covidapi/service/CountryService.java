@@ -8,11 +8,11 @@ import java.util.Optional;
 
 public interface CountryService {
 
-    void save(Country country);
-
     void saveAll(Iterable<Country> countryCollection);
 
     Optional<Country> findByName(String name);
 
     List<CountryDto> findAll();
+
+    List<String> getSlugListByCountryNameList(List<String> countryNameList);
 }
