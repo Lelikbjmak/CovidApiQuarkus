@@ -1,0 +1,27 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+
+    <changeSet id="2" author="Lelikbjmak">
+        <sqlFile
+                dbms="postgresql"
+                endDelimiter="\nGO"
+                stripComments="true"
+                splitStatements="true"
+                relativeToChangelogFile="true"
+                path="sql/10-create-country-covid-details-table.sql"/>
+        <rollback>
+            <sqlFile
+                    dbms="postgresql"
+                    endDelimiter="\nGO"
+                    stripComments="true"
+                    splitStatements="true"
+                    relativeToChangelogFile="true"
+                    path="sql/10-drop-country-covid-details-table.sql"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
