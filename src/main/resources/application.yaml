@@ -1,0 +1,28 @@
+# ----- Properties -----
+
+jedis:
+  host: localhost
+  port: 6379
+#  expiration: 3600
+#  connection-pool:
+#    total-connections: 16
+#    max-idle-connections: 8
+#    min-idle-connections: 3
+
+
+quarkus:
+  rest-client:
+    covid-api:
+      url: https://api.covid19api.com
+  datasource:
+    db-kind: postgresql
+    username: postgres
+    password: root
+    jdbc:
+      url: jdbc:postgresql://localhost:5432/quarkus-covid-api
+  hibernate-orm:
+    database:
+      generation: validate
+  liquibase:
+    change-log: db/changelog/changelog.xml
+    migrate-at-start: true
