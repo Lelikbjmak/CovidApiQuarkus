@@ -4,7 +4,6 @@ import com.innowise.covidapi.dto.CountryCovidDetailsDto;
 import com.innowise.covidapi.entity.CountryCovidDetails;
 import com.innowise.covidapi.entity.id.CountryCovidDetailsId;
 import io.quarkus.test.junit.QuarkusTest;
-import jakarta.inject.Inject;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -15,7 +14,6 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 class CovidDetailsMapperTest {
 
-    @Inject
     private final CovidDetailsMapper covidDetailsMapper;
 
     @Test
