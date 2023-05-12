@@ -3,12 +3,6 @@
 jedis:
   host: localhost
   port: 6379
-#  expiration: 3600
-#  connection-pool:
-#    total-connections: 16
-#    max-idle-connections: 8
-#    min-idle-connections: 3
-
 
 quarkus:
   rest-client:
@@ -26,3 +20,19 @@ quarkus:
   liquibase:
     change-log: db/changelog/changelog.xml
     migrate-at-start: true
+
+
+"%test":
+  quarkus:
+    datasource:
+      db-kind: postgresql
+      username: postgres
+      password: root
+      jdbc:
+        url: jdbc:postgresql://localhost:5432/quarkus-covid-api-test
+    hibernate-orm:
+      database:
+        generation: create-drop
+    liquibase:
+      change-log: db/changelog/changelog.xml
+      migrate-at-start: true
