@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.innowise.covidapi.dto.CountryCovidDetailsDto;
 import com.innowise.covidapi.dto.CountryDto;
+import com.innowise.covidapi.exception.ExternalApiException;
 import com.innowise.covidapi.service.ApiClientService;
 import com.innowise.covidapi.util.ApplicationConstant;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,6 +21,7 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
 
 @Slf4j
 @ApplicationScoped
@@ -35,8 +37,9 @@ public class ApiResponseParserService {
     public List<CountryCovidDetailsDto> getTodayCovidDetailsFromApi() {
         Response response = apiClientService.getTodayCovidDetails();
 
-        if (response.getStatus() != 200)
-            return new ArrayList<>();
+        if (response.getStatus() != 200) {
+            throw new ExternalApiException("External API error.", response.getStatus(), response.readEntity(String.class));
+        }
 
         String jsonEntity = response.readEntity(String.class);
 
@@ -57,6 +60,11 @@ public class ApiResponseParserService {
         return countrySlugList.stream().map(slug -> {
 
             Response response = apiClientService.getTermCovidDetails(slug, firstDate, lastDate);
+
+            if (response.getStatus() != 200) {
+                throw new ExternalApiException("External API error.", response.getStatus(), response.readEntity(String.class));
+            }
+
             refreshApiCallRateLimit(response);
 
             List<CountryCovidDetailsDto> countryCovidDetailsDtoList = response.readEntity(new GenericType<>() {
@@ -73,10 +81,12 @@ public class ApiResponseParserService {
 
         Response response = apiClientService.getPossibleCountryList();
 
-        if (response.getStatus() != 200)
-            return new ArrayList<>();
+        if (response.getStatus() != 200) {
+            throw new ExternalApiException("External API error.", response.getStatus(), response.readEntity(String.class));
+        }
 
-        return response.readEntity(new GenericType<>() {});
+        return response.readEntity(new GenericType<>() {
+        });
     }
 
     private void refreshApiCallRateLimit(Response apiResponse) {
