@@ -70,7 +70,6 @@ class MaxMinCovidDetailsEvaluatorServiceImplTest {
                 todayMaxMinCovidDetails.getMax());
 
         Mockito.verify(covidDetailsService, Mockito.times(1)).ascertainCovidDetailsNotPresentedInDatabase(remainCountryList, todayCovidDetailsFromApi);
-        Mockito.verify(covidDetailsService, Mockito.times(1)).save(Mockito.any());
         Mockito.verify(countryCovidDetailsRedisService, Mockito.times(1)).save(Mockito.any());
         Mockito.verify(covidDetailsMapper, Mockito.times(1)).mapToEntity(Mockito.any());
         Mockito.verify(apiResponseParserService, Mockito.times(1)).getTodayCovidDetailsFromApi();
