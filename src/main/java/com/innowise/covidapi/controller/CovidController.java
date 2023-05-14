@@ -1,6 +1,7 @@
 package com.innowise.covidapi.controller;
 
 import com.innowise.covidapi.annotation.ValidCountry;
+import com.innowise.covidapi.annotation.ValidDate;
 import com.innowise.covidapi.dto.CountryDto;
 import com.innowise.covidapi.dto.MaxMinCovidDetailsDto;
 import com.innowise.covidapi.service.CountryService;
@@ -41,14 +42,14 @@ public class CovidController {
 
     @POST
     @Path("/day/{day}")
-    public Response getCovidDetailsForCertainDay(@Form @ValidCountry List<String> countryNameList, @PathParam("day") LocalDate day) {
+    public Response getCovidDetailsForCertainDay(@Form @ValidCountry List<String> countryNameList, @PathParam("day") @ValidDate LocalDate day) {
         MaxMinCovidDetailsDto dayCovidDetails = covidDetailsEvaluatorService.getCovidDetailsForCertainDay(countryNameList, day);
         return Response.status(Response.Status.OK).entity(dayCovidDetails).build();
     }
 
     @POST
     @Path("/term")
-    public Response getCovidDetailsForTerm(@Form @ValidCountry List<String> countryNameList, @QueryParam("from") LocalDate firstDate, @QueryParam("to") LocalDate lastDate) {
+    public Response getCovidDetailsForTerm(@Form @ValidCountry List<String> countryNameList, @QueryParam("from") @ValidDate LocalDate firstDate, @QueryParam("to") @ValidDate LocalDate lastDate) {
         MaxMinCovidDetailsDto termCovidDetails = covidDetailsEvaluatorService.getCovidDetailsForTerm(countryNameList, firstDate, lastDate);
         return Response.status(Response.Status.OK).entity(termCovidDetails).build();
     }
