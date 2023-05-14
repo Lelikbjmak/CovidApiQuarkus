@@ -1,0 +1,138 @@
+# ----- Properties -----
+
+openapi: 3.0.3
+info:
+  title: Covid API
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.1
+  contact:
+    email: denissolovey990@gmial.com
+    url: https://www.linkedin.com/in/denis-solovey-261613246/
+    name: Denis Solovey
+  description: Covid API provides us with an opportunity to ascertain MAX & MIN covid cases for day/term for provided list of countries.
+paths:
+  /api/v1/covid/countries:
+    get:
+      tags:
+        - Covid Controller
+      responses:
+        200:
+          description: aaa.
+        default:
+          description: Get possible list of counties. Only for that countries you can obtain covid info.
+  /api/v1/covid/countries/day/{day}:
+    post:
+      tags:
+        - Covid Controller
+      parameters:
+        - name: day
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/LocalDate"
+          example: 2021-04-25
+          description: Certain day we want to obtain info for provided list of countries.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Countries"
+        description: List of countries to get Covid information for.
+      responses:
+        200:
+          description: Successfully obtain Max and Min cases for particular day for list of countries.
+        404:
+          description: Some country (countries) you want to obtain Covid info for doesn't exist or not found. Check a full list of supported countries with '/api/v1/covid/countries' path. Moreover requested date can be invalid, look LocalDate schema.
+        default:
+          description: We use external API sometimes if we can't access external API our service become temporary unavailable hence status is the same that external API respond us.
+  /api/v1/covid/countries/summary:
+    post:
+      tags:
+        - Covid Controller
+      requestBody:
+        required: true
+        description: List of countries to get Covid information for.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Countries"
+      responses:
+        200:
+          description: OK - Successfully obtain Covid info for current day. Info for today regularly updated.
+        404:
+          description: Some country (countries) you want to obtain Covid info for doesn't exist or not found. Check a full list of supported countries with '/api/v1/covid/countries' path. Moreover requested date can be invalid, look LocalDate schema.
+        default:
+          description: We use external API sometimes if we can't access external API our service become temporary unavailable hence status is the same that external API respond us.
+  /api/v1/covid/countries/term:
+    post:
+      tags:
+        - Covid Controller
+      parameters:
+        - name: from
+          required: true
+          in: query
+          schema:
+            $ref: "#/components/schemas/LocalDate"
+          example: 2021-03-14
+          description: Start date of term.
+        - name: to
+          required: true
+          in: query
+          schema:
+            $ref: "#/components/schemasLocalDate"
+          example: 2021-03-18
+          description: End date of term.
+      requestBody:
+        required: true
+        description: List of countries to get Covid information for.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Countries"
+      responses:
+        200:
+          description: Successfully obtained Max Min covid cases for term (from - to) for list of countries.
+        404:
+          description: Some country (countries) you want to obtain Covid info for doesn't exist or not found. Check a full list of supported countries with '/api/v1/covid/countries' path.
+        default:
+          description: We use external API sometimes if we can't access external API our service become temporary unavailable hence status is the same that external API respond us.
+components:
+  schemas:
+    LocalDate:
+      format: date
+      type: string
+      description: Date should be between 2020-02-25 and current date.
+      example: 2021-03-14
+    Countries:
+      type: array
+      items:
+        type: string
+      example: [ 'Belarus', 'Japan', 'Bolivia' ]
+    CountryCovidDetails:
+      type: object
+      properties:
+        country:
+          type: string
+        cases:
+          type: integer
+        totalCases:
+          type: integer
+        date:
+          type: string
+          format: date
+      example: { 'country': 'Japan', 'cases': 1264, 'totalCases': 896674, 'date': 2021-01-16 }
+    MaxMinCovidDetails:
+      type: object
+      properties:
+        min:
+          type: array
+          items:
+            $ref: '#/components/schemas/CountryCovidDetails'
+        max:
+          type: array
+          items:
+            $ref: '#/components/schemas/CountryCovidDetails'
+      example: { 'min': [ 'country': 'Belarus', 'cases': 244, 'totalCases': 193674, 'date': 2021-11-16 ], 'max': [ 'country': 'Serbia', 'cases': 2844, 'totalCases': 375094, 'date': 2020-12-26 ] }
