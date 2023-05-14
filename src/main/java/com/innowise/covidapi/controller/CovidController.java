@@ -31,6 +31,7 @@ public class CovidController {
     public Response getCountryList() {
         List<CountryDto> countryList = countryService.findAll();
         return Response.ok(countryList).build();
+    }
 
     @POST
     @Path("/summary")
