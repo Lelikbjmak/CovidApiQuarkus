@@ -20,7 +20,11 @@ quarkus:
   liquibase:
     change-log: db/changelog/changelog.xml
     migrate-at-start: true
-
+  smallrye-openapi:
+    path: /swagger
+  swagger-ui:
+    always-include: true
+    path: /swagger-ui
 
 "%test":
   quarkus:
