@@ -69,7 +69,7 @@ public class MaxMinCovidDetailsEvaluatorServiceImpl implements MaxMinCovidDetail
 
         List<String> remainCountryNameList = getRemainCountryNameList(countryNameList, presentedInDatabaseCovidDetailsList);
 
-        List<String> remainCountrySlugList = countryService.getSlugListByCountryNameList(countryNameList);
+        List<String> remainCountrySlugList = countryService.getSlugListByCountryNameList(remainCountryNameList);
 
         List<CountryCovidDetailsDto> getDyaApiCovidDetailsDtoList = apiResponseParserService.getTermCovidDetailsFromApi(remainCountrySlugList, date, date.plusDays(2)); // plus 2 due to API incorrect work
         List<CountryCovidDetailsDto> notPresentedInDatabaseCovidDetails = covidDetailsService.ascertainCovidDetailsNotPresentedInDatabase(remainCountryNameList, getDyaApiCovidDetailsDtoList);
